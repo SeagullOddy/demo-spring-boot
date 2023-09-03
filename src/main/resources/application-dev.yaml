@@ -70,3 +70,8 @@ management:
       enabled: true
     os:
       enabled: true
+
+mybatis-plus:
+  configuration:
+    # 开启日志打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

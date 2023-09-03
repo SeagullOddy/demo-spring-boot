@@ -1,12 +1,19 @@
 package com.oddy.demospringboot;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.generator.FastAutoGenerator;
+import com.baomidou.mybatisplus.generator.config.DataSourceConfig.Builder;
 import com.oddy.demospringboot.entity.Account;
+import com.oddy.demospringboot.mapper.AccountPlusMapper;
 import jakarta.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,16 +27,16 @@ class DemoSpringBootApplicationTests {
   @Resource
   private PasswordEncoder passwordEncoder;
 
+  @Test
+  void passwordEncoderTest() {
+    log.info("Password: " + passwordEncoder.encode("admin"));
+  }
+
   @Resource
   private JdbcTemplate jdbcTemplate;
 
   @Resource
   private DataSource dataSource;
-
-  @Test
-  void passwordEncoderTest() {
-    log.info("Password: " + passwordEncoder.encode("admin"));
-  }
 
   @Test
   void springJDBCTest() {
@@ -74,6 +81,45 @@ class DemoSpringBootApplicationTests {
     map.put("password", "$2a$10$D/Eyfj0KweoCsW8Jl6EM6.0ubDG4ZdCeIq3M9YuYSIQBZmuRIK8Oe"); // admin
     Number key = simpleJdbcInsert.executeAndReturnKey(map);
     log.info(key.toString());
+  }
+
+  @Resource
+  private AccountPlusMapper accountPlusMapper;
+
+  @Test
+  void mybatisPlusTest() {
+    // 自带的简单操作
+    log.info(accountPlusMapper.selectById(1).toString());
+
+    // 复杂操作，使用 QueryWrapper
+    // 也可以使用工具类 Wrappers 创建 QueryWrapper
+//    Wrappers.<Account>query()
+//        .select("...");
+    QueryWrapper<Account> wrapper = new QueryWrapper<>();
+    wrapper.select("id", "name", "email", "password") // 筛选需要的列
+        .ge("id", 2) // 指定某一列的值大于等于某值
+        .orderByDesc("id"); // 根据某一列降序排序
+    log.info(accountPlusMapper.selectList(wrapper).toString());
+
+    // 分页操作，查询第一页，共分两页
+    Page<Account> page = accountPlusMapper.selectPage(Page.of(1, 2), Wrappers.query());
+    log.info(page.getRecords().toString());
+  }
+
+  @Test
+  void mybatisPlusGenerate() {
+    FastAutoGenerator.create(new Builder(dataSource))
+        // 全局配置
+        .globalConfig(builder -> builder.author("SeagullOddy (shabbyacc@outlook.com)")
+            .commentDate("2023-09-03")
+            .outputDir("/src/main/java"))
+        // 打包配置
+        .packageConfig(builder -> builder.parent("com.oddy"))
+        // 策略配置，这里是为生成的 Mapper 添加 @Mapper 注解
+        .strategyConfig(builder -> builder.mapperBuilder().mapperAnnotation(Mapper.class).build())
+        // 模板配置，这里是用我们 /resource/template/ 目录下的模板 mapper.java.vm 来生成 Mapper 类
+        .templateConfig(builder -> builder.mapper("/template/mapper.java.vm"))
+        .execute();
   }
 
 }
