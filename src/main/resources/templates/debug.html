@@ -12,6 +12,7 @@
 <button onclick="test()">Test</button>
 <button onclick="testObjectYaml()">Test Object Yaml</button>
 <button onclick="testObjectQuery()">Test Object Query</button>
+<button onclick="testObjectQueryJPA()">Test Object Query JPA</button>
 <button onclick="testLogbackMDC()">Test Logback MDC</button>
 <button onclick="testEmail()">Test Email</button>
 </body>
@@ -36,6 +37,17 @@
       id = prompt('请输入查询的对象 id：', '')
     }
     fetch('/test-object-query?id=' + id)
+    .then(response => response.text())
+    .then(data => alert(data))
+    .catch(error => alert(error))
+  }
+
+  function testObjectQueryJPA() {
+    let id = '';
+    while (id === '') {
+      id = prompt('请输入查询的对象 id：', '')
+    }
+    fetch('/test-object-query-jpa?id=' + id)
     .then(response => response.text())
     .then(data => alert(data))
     .catch(error => alert(error))

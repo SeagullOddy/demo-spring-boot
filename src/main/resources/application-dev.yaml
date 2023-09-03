@@ -44,7 +44,14 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
           starttls:
             enable: true
+  jpa:
+    # 打开日志
+    show-sql: true
+    hibernate:
+      # 检查数据库的表结构，没有时会自动创建，生产环境不推荐打开
+      ddl-auto: update
 
+# Actuator
 management:
   endpoints:
     web:

@@ -84,11 +84,15 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
     </dependency>
-    <!--  Mybatis | Spring JDBC & Database Driver  -->
-    <!--  1. Mybatis 无需实现 SqlSessionTemplate/SqlSessionFactoryBean  -->
-    <!--  2. Mybatis 无需配置 MapperScan，使用 @Mapper 注解即可  -->
-    <!--  3. Spring JDBC 提供了 JdbcTemplate，封装了常用的 JDBC 操作  -->
+    <!--  Spring JDBC | Mybatis (Plus) | JPA & Database Driver  -->
+    <!--  1. Spring JDBC 提供了 JdbcTemplate，封装了常用的 JDBC 操作  -->
+    <!--  2. Mybatis 无需实现 SqlSessionTemplate/SqlSessionFactoryBean  -->
+    <!--  3. Mybatis 无需配置 MapperScan，使用 @Mapper 注解即可  -->
     <!--  4. 需要配置 DataSource（在配置文件中编写）  -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.mybatis.spring.boot</groupId>
       <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -96,7 +100,7 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-jdbc</artifactId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
     <dependency>
       <groupId>com.mysql</groupId>

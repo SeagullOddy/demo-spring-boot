@@ -2,6 +2,7 @@ package com.oddy.demospringboot.controller;
 
 import com.oddy.demospringboot.entity.Account;
 import com.oddy.demospringboot.mapper.AccountMapper;
+import com.oddy.demospringboot.repo.AccountRepository;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
@@ -64,6 +65,15 @@ public class TestController {
   @ResponseBody
   public Account queryTestObject(@RequestParam Integer id) {
     return accountMapper.selectById(id);
+  }
+
+  @Resource
+  private AccountRepository accountRepository;
+
+  @GetMapping("/test-object-query-jpa")
+  @ResponseBody
+  public Account queryTestObjectJPA(@RequestParam Integer id) {
+    return accountRepository.findById(id).get();
   }
 
   @GetMapping("/test-logback-mdc")
